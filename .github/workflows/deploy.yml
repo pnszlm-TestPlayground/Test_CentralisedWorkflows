@@ -1,0 +1,42 @@
+name: Deploy selected repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: Full name of the repository to deploy (org/repo)
+        required: true
+        type: string
+      ref:
+        description: Branch or tag to deploy
+        required: false
+        default: main
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Generate GitHub App installation token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Inspect and simulate deploy
+        run: |
+          echo "Deploying ${{ github.event.inputs.repo }} @ ${{ github.event.inputs.ref }}"
+          if [ -f Dockerfile ]; then echo "Detected Dockerfile -> building image (simulated)"; fi
+          if [ -f package.json ]; then echo "Detected Node.js app (simulated)"; fi
+          if [ -f requirements.txt ] || [ -f pyproject.toml ]; then echo "Detected Python app (simulated)"; fi
+          echo "Simulated deploy complete."

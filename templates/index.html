@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Centralised Deploy POC</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; padding: 0 1rem; color: #1f2328; }
+    h1 { font-size: 1.5rem; }
+    .muted { color: #59636e; }
+    select, button { font-size: 1rem; padding: .5rem .75rem; }
+    select { width: 100%; margin: 1rem 0; }
+    button { background: #0969da; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+    button:disabled { background: #96b7e0; cursor: not-allowed; }
+    .card { border: 1px solid #d0d7de; border-radius: 6px; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Centralised Deploy POC</h1>
+  <p class="muted">Select an organisation repository to "use" (simulate a cloud deployment).</p>
+
+  <form method="post" action="/deploy">
+    <select name="repo" id="repo">
+      <option value="" disabled selected>-- choose a repo --</option>
+      {% for repo in repos %}
+      <option value="{{ repo.full_name }}">{{ repo.full_name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" id="submit" disabled>Deploy</button>
+  </form>
+
+  {% if repos %}
+  <p class="muted">{{ repos|length }} repos visible to the App in {{ org }}</p>
+  {% else %}
+  <p class="muted">No repos returned. Check the App is installed on {{ org }}.</p>
+  {% endif %}
+
+  <script>
+    const select = document.getElementById('repo');
+    const submit = document.getElementById('submit');
+    select.addEventListener('change', () => submit.disabled = !select.value);
+  </script>
+</body>
+</html>

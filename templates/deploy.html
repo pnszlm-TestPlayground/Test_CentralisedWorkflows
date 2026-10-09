@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deploy dispatched</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 720px; padding: 0 1rem; color: #1f2328; }
+    h1 { font-size: 1.5rem; }
+    .muted { color: #59636e; }
+    code { background: #f6f8fa; padding: .15rem .35rem; border-radius: 4px; }
+    a { color: #0969da; }
+    .card { border: 1px solid #d0d7de; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Deploy dispatched</h1>
+  <div class="card">
+    <strong>{{ repo }}</strong> <span class="muted">@ {{ ref }}</span>
+    <p>A <code>workflow_dispatch</code> event was sent to the central workflow
+    <code>{{ workflow_file }}</code>.</p>
+    <p><a href="{{ runs_url }}" target="_blank">View workflow runs →</a></p>
+  </div>
+  <a href="/">← choose another repo</a>
+</body>
+</html>
