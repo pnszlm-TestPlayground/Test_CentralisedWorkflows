@@ -33,6 +33,11 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           token: ${{ steps.app-token.outputs.token }}
 
+      - name: List fetched files
+        run: |
+          echo "Fetched files from ${{ github.event.inputs.repo }}:"
+          find . -type f -not -path './.git/*' | sort
+
       - name: Inspect and simulate deploy
         run: |
           echo "Deploying ${{ github.event.inputs.repo }} @ ${{ github.event.inputs.ref }}"
